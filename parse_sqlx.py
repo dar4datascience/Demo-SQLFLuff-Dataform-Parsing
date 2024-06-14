@@ -43,48 +43,39 @@ with open(file_path, 'r') as file:
 
 # Now, extract the 'config' section
 config_content, config_start_line, config_end_line = extract_section(content, 'config')
-print(f"Config section content:\n{config_content}")
-print(f"Config section starts at line: {config_start_line}")
-print(f"Config section ends at line: {config_end_line}")
+# print(f"Config section content:\n{config_content}")
+# print(f"Config section starts at line: {config_start_line}")
+# print(f"Config section ends at line: {config_end_line}")
 
 # Extract the 'declare' section
 declare_content, declare_start_line, declare_end_line = extract_section(content, 'declare')
-print(f"Declare section content:\n{declare_content}")
-print(f"Declare section starts at line: {declare_start_line}")
-print(f"Declare section ends at line: {declare_end_line}")
-
+# print(f"Declare section content:\n{declare_content}")
+# print(f"Declare section starts at line: {declare_start_line}")
+# print(f"Declare section ends at line: {declare_end_line}")
 
 def extract_sql(file_path):
     with open(file_path, 'r') as file:
-        content = file.read()
+        lines = file.readlines()
 
     # Remove block comments
-    content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+    lines = [re.sub(r'/\*.*?\*/', '', line, flags=re.DOTALL) for line in lines]
 
     # Extract config and declare sections
-    config_section, config_start, config_end = extract_config(content)
-    print(config_section)
-    declare_section, declare_start, declare_end = extract_declare(content)
-    print(declare_section)
+    config_section, config_start, config_end = extract_section(''.join(lines), 'config')
+    declare_section, declare_start, declare_end = extract_section(''.join(lines), 'declare')
 
-    # Remove config and declare sections from content
-    content = content[:config_start] + content[config_end:]
-    content = content[:declare_start] + content[declare_end:]
+    # Determine the start line of the SQL code
+    sql_start_line = max(config_end, declare_end) + 1
 
     # Extract SQL transformation logic
-    pattern = re.compile(r'SQL transformation logic\s*{(.*?)\}', re.DOTALL)
-    match = pattern.search(content)
-    if match:
-        sql_logic = match.group(1).strip()
-    else:
-        return None
+    sql_logic_lines = lines[sql_start_line:]
 
-    # Replace ${ref("table_name")} with table_name
-    sql_logic = re.sub(r'\$\{ref\("([^"]+)"\)\}', r'\1', sql_logic)
+    # Replace ${ref("table_name")} with table_name in each line
+    sql_logic_lines = [re.sub(r'\$\{ref\("([^"]+)"\)\}', r'\1', line) for line in sql_logic_lines]
 
-    return sql_logic.strip()
+    return ''.join(sql_logic_lines).strip()
 
-# # Example usage
-# file_path = "demo.sqlx"
-# pure_sql = extract_sql(file_path)
-# print("Pure SQL:\n", pure_sql)
+# Example usage
+file_path = "demo.sqlx"
+pure_sql = extract_sql(file_path)
+print("Pure SQL:\n", pure_sql)
