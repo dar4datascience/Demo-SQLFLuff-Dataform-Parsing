@@ -1,0 +1,48 @@
+/*
+ * Dataform SQLX Boilerplate
+ *
+ * Author: Your Name
+ * Date: YYYY-MM-DD
+ * Description: Briefly describe the purpose of this SQLX script.
+ */
+
+config {
+  // Configuration settings for the table/view
+  type: "table",  // options: table, view, incremental
+  schema: "your_schema_name",
+  columns: {},
+  tags: ["your_tag"]
+}
+
+// Import necessary dependencies (if any)
+// Example: const utils = require("dataform-utils");
+
+// Declare input dependencies (tables/views)
+declare {
+  input_table_one: {
+    type: "table",
+    schema: "source_schema",
+    name: "source_table_one"
+  }
+  input_table_two: {
+    type: "table",
+    schema: "source_schema",
+    name: "source_table_two"
+  }
+}
+
+// SQL transformation logic
+select
+  a.column1,
+  a.column2,
+  b.column3,
+  -- More columns as needed
+from
+  ${ref("input_table_one")} a
+join
+  ${ref("input_table_two")} b
+on
+  a.join_column = b.join_column
+where
+  -- Add any necessary filtering logic
+  a.some_column is not null
