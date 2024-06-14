@@ -29,12 +29,12 @@ def map_sqlx_to_dict(file_path):
     return line_dict
 
 # Example usage
-file_path = "demo.sqlx"
+file_path = "ctedemo.sqlx"
 line_dict = map_sqlx_to_dict(file_path)
 #print(line_dict)
 
 # First, map the .sqlx file to a dictionary
-file_path = "demo.sqlx"
+file_path = "ctedemo.sqlx"
 line_dict = map_sqlx_to_dict(file_path)
 
 # Then, read the .sqlx file content
@@ -43,15 +43,15 @@ with open(file_path, 'r') as file:
 
 # Now, extract the 'config' section
 config_content, config_start_line, config_end_line = extract_section(content, 'config')
-# print(f"Config section content:\n{config_content}")
-# print(f"Config section starts at line: {config_start_line}")
-# print(f"Config section ends at line: {config_end_line}")
+print(f"Config section content:\n{config_content}")
+print(f"Config section starts at line: {config_start_line}")
+print(f"Config section ends at line: {config_end_line}")
 
 # Extract the 'declare' section
 declare_content, declare_start_line, declare_end_line = extract_section(content, 'declare')
-# print(f"Declare section content:\n{declare_content}")
-# print(f"Declare section starts at line: {declare_start_line}")
-# print(f"Declare section ends at line: {declare_end_line}")
+print(f"Declare section content:\n{declare_content}")
+print(f"Declare section starts at line: {declare_start_line}")
+print(f"Declare section ends at line: {declare_end_line}")
 
 def extract_sql(file_path):
     with open(file_path, 'r') as file:
@@ -76,6 +76,6 @@ def extract_sql(file_path):
     return ''.join(sql_logic_lines).strip()
 
 # Example usage
-file_path = "demo.sqlx"
+file_path = "ctedemo.sqlx"
 pure_sql = extract_sql(file_path)
 print("Pure SQL:\n", pure_sql)

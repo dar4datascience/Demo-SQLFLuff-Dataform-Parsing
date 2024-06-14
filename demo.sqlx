@@ -14,6 +14,7 @@ config {
   tags: ["your_tag"]
 }
 
+
 // Import necessary dependencies (if any)
 // Example: const utils = require("dataform-utils");
 
@@ -30,6 +31,7 @@ declare {
     name: "source_table_two"
   }
 }
+
 
 // SQL transformation logic
 select
